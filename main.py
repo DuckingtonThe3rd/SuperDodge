@@ -12,9 +12,10 @@ pygame.init()
 screen = pygame.display.set_mode((600, 450))
 pygame.display.set_caption('gaem')
 
-def draw_rectangle(x, y, width, height, color, rotation=0):
+def draw_rotated_rectangle(x, y, width, height, color, rotation=0):
     points = []
 
+    # Hey rewamd i made some explanations for you
     # The distance from the center of the rectangle to
     # one of the corners is the same for each corner.
     radius = math.sqrt((height / 2)**2 + (width / 2)**2)
@@ -37,17 +38,33 @@ def draw_rectangle(x, y, width, height, color, rotation=0):
 
     pygame.draw.polygon(screen, color, points)
 
-angle=0
+angle = 0
+
+enemy_x = []
+enemy_y = []
+
+for i in range(random.randint(0, 20)):
+    enemy_x.append(random.randint(0, 600))
+    enemy_y.append(0)
 
 while True:
     screen.fill('#ababab')
-    angle -= 0.1
+    angle -= 2
     x1, y1 = pygame.mouse.get_pos()
-    x += (x1 - x) / 500
-    y += (y1 - y) / 500
-    draw_rectangle(x, y, 10, 10, '#216BFF', rotation=angle)
+    x += (x1 - x) / 10
+    y += (y1 - y) / 10
+
+    draw_rotated_rectangle(x, y, 10, 10, '#216BFF', rotation=angle)
+
     for event in pygame.event.get():
         if event.type == QUIT:
             pygame.quit()
+
     pygame.display.flip()
-    
+
+    if len(enemy_x) > 0:
+        for i in range(len(enemy_x)):
+            enemy_x[i] += random.randint(-5, 5)
+            enemy_y[i] += random.randint(0, 10)
+            
+            draw_rotated_rectangle(enemy_x[i], enemy_y[i], 10, 10, '#FF0000', rotation=angle)
